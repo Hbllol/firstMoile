@@ -107,10 +107,6 @@ h3 {
 }
 
 
-/*.listChangesBox ul li:hover .listbox {
-    display: block;
-}*/
-
 .listbox {
     position: absolute;
     z-index: 999;
