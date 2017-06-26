@@ -102,7 +102,7 @@
             <div class=" listChangesBox ">
                 <ul>
                     <li class="listAll active ">
-                        <a href="yanjiangji.html">全部</a>
+                        <a>全部</a>
                     </li>
                     <li class="listTime ">
                         <a>类别I</a>
@@ -135,12 +135,12 @@
                 <!--<li></li>-->
             </div>
         </div>
-        <!--<div class="more">
+        <div class="more">
             加载更多
         </div>
         <p class="none">
             已经没有更多了
-        </p>-->
+        </p>
 
     </div>
     <div class="footer ">
@@ -261,156 +261,140 @@
         }
 
     })
-    $('.listTime').eq(0).click(function() {
-        $('.listbox').eq(0).slideToggle()
+    var num = 12;
+
+    $.ajax({
+        url: 'js/yixi.php',
+        type: 'get',
+        success: function(data) {
+            data = JSON.parse(data)
+                // console.log(data)
+                // console.log(data)
+            $('.more').eq(0).click(function() {
+                $('.baseVideoList').html('');
+                num += 12;
+                if (num >= data.data.length) {
+                    alert('已经到底了')
+                }
+                add(num);
+            })
+            add(num);
+            //start 加载数据
+            function add(num) {
+
+                for (var i = 0; i < num; i++) {
+                    // console.log(dom)
+                    var dom =
+                        // '<a href = "video.html?' + i + '">' +
+                        '<li>' +
+                        '<div class="baseVideoBox ">' +
+                        '<div class="videoContent " style="background:url( ' + data.data[i].lectures[0].cover + ');background-position: center center;background-size: cover; "> ' +
+                        '<div class="videoCover ">' +
+                        '<a>' +
+                        '<div class="videoHeadBox ">' +
+                        '<div class="baseHeadContent videopos ">' +
+                        '<img src=' + data.data[i].lectures[0].lecturer.pic + '>' +
+                        '</div>' +
+                        '</div>' +
+                        '<span class="name ">' + data.data[i].lectures[0].lecturer.nickname + '</span> <span class="speakersDescription ">' + data.data[i].lectures[0].lecturer.desc + '</span>' +
+                        '<div class="playInfoList ">' +
+                        '<span class="playTime ">' +
+                        '<i class="fa fa-play-circle " aria-hidden="true ">' + data.data[i].lectures[0].viewnum + '</i>' +
+                        '</span>' +
+                        '<span class="liked ">' +
+                        '<i class="fa fa-gratipay " aria-hidden="true ">' + data.data[i].lectures[0].likenum + '</i>' +
+                        '</span>' +
+                        '<span class="comment ">' +
+                        '<i class="fa fa-commenting " aria-hidden="true ">' + data.data[i].lectures[0].cmtnum + '</i>' +
+                        '</span>' +
+                        '</div>' +
+                        '</a>' +
+                        '</div>' +
+                        '</div>' +
+                        '<span class="videoTitle ">' + data.data[i].lectures[0].title + '</span>' +
+                        '</div>' +
+                        '</li>'
+                        // '</a>';
+
+                    $('.baseVideoList').append(dom);
+                    // dom[i].click(function() {
+                    //     window.open('video.html?' + i)
+                    // })
+                }
+                $.each($('.baseVideoList').eq(0).children('li'), function(i) {
+                    // console.log($('.baseVideoList').eq(0).children('li').eq(i))
+                    $('.baseVideoList').eq(0).children('li').eq(i).click(function() {
+                        window.location.href = 'video.html?' + i
+                    })
+                })
+
+            }
+
+            //end 加载数据
+
+            var aa = false;
+
+            function res() {
+                //start  判断屏幕尺寸
+
+                var wid = $(window).width();
+                console.log(wid);
+                if (wid <= 768) {
+                    console.log("移动");
+                    $(window).scroll(function() {
+                        console.log("这是移动端");
+                        var foot = $(window).scrollTop() >= $(document).height() - $(window).height() - 100;
+                        console.log(foot);
+                        if (foot && wid <= 768) {
+                            $('.baseVideoList').html('');
+                            num += 12;
+                            if (num >= data.data.length) {
+                                $('.none').eq(0).show();
+                            }
+                            add(num);
+                        }
+                    });
+                } else {
+                    aa = true;
+                    console.log("pc");
+                }
+            }
+            //end  判断屏幕尺寸
+            window.onresize = function() {
+                res();
+                if (aa == true) {
+                    window.location.reload();
+                    aa = false;
+                }
+            }
+            res();
+
+        }
+
     })
-    $('.listClass').eq(0).click(function() {
-        $('.listbox').eq(1).slideToggle()
-    })
+
     $.ajax({
         url: 'js/yixi.fenlei.php',
         type: 'get',
         success: function(data) {
             data = JSON.parse(data)
             console.log(data);
-            var location = window.location.href;
-            var listid = location.split('?')[1];
-            console.log(listid)
-            fenlei(listid)
             $.each($('.listbox').eq(0).children('div'), function(i) {
                 $('.listbox').eq(0).children('div').eq(i).click(function() {
-                    $('.baseVideoList').html('');
                     var list = data.data[i].id;
-                    // console.log(list)
-                    fenlei(list)
+                    console.log(list)
+                    window.location.href = 'fenlei.html?' + list
                 })
 
             })
             $.each($('.listbox').eq(1).children('div'), function(i) {
-                    $('.listbox').eq(1).children('div').eq(i).click(function() {
-                        $('.baseVideoList').html('');
-                        var list = data.data[6 + i].id;
-                        // console.log(list)
-                        fenlei(list)
-                    })
-
+                $('.listbox').eq(1).children('div').eq(i).click(function() {
+                    var list = data.data[i + 6].id;
+                    console.log(list)
+                    window.location.href = 'fenlei.html?' + list
                 })
-                // var num = 12;
 
-            function fenlei(list) {
-                $.ajax({
-                    url: 'js/yixi.fenleiye.php',
-                    data: {
-                        flid: list
-                    },
-                    type: 'get',
-                    success: function(data) {
-                        data = JSON.parse(data)
-                        console.log(data)
-                            // $('.more').eq(0).click(function() {
-                            //     $('.baseVideoList').html('');
-                            //     num += 12;
-                            //     add(num);
-
-                        //     if (num >= data.data.length) {
-                        //         alert('没有更多了')
-                        //     }
-                        // })
-                        add(data.data.length)
-
-                        function add(num) {
-
-                            for (var i = 0; i < num; i++) {
-                                var dom =
-                                    // '<a href = "video.html?' + i + '">' +
-                                    '<li>' +
-                                    '<div class="baseVideoBox ">' +
-                                    '<div class="videoContent " style="background:url( ' + data.data[i].lectures_with_cover[0].cover + ');background-position: center center;background-size: cover; "> ' +
-                                    '<div class="videoCover ">' +
-                                    '<a>' +
-                                    '<div class="videoHeadBox ">' +
-                                    '<div class="baseHeadContent videopos ">' +
-                                    '<img src=' + data.data[i].pic + '>' +
-                                    '</div>' +
-                                    '</div>' +
-                                    '<span class="name ">' + data.data[i].nickname + '</span> <span class="speakersDescription ">' + data.data[i].desc + '</span>' +
-                                    '<div class="playInfoList ">' +
-                                    '<span class="playTime ">' +
-                                    '<i class="fa fa-play-circle " aria-hidden="true ">' + data.data[i].id + '</i>' +
-                                    '</span>' +
-                                    '<span class="liked ">' +
-                                    '<i class="fa fa-gratipay " aria-hidden="true ">99</i>' +
-                                    '</span>' +
-                                    '<span class="comment ">' +
-                                    '<i class="fa fa-commenting " aria-hidden="true ">199</i>' +
-                                    '</span>' +
-                                    '</div>' +
-                                    '</a>' +
-                                    '</div>' +
-                                    '</div>' +
-                                    '<span class="videoTitle ">' + data.data[i].lectures_with_cover[0].title + '</span>' +
-                                    '</div>' +
-                                    '</li>'
-                                    // '</a>';
-
-                                $('.baseVideoList').append(dom);
-                                // dom[i].click(function() {
-                                //     window.open('video.html?' + i)
-                                // })
-                            }
-                            $.each($('.baseVideoList').eq(0).children('li'), function(i) {
-                                // console.log($('.baseVideoList').eq(0).children('li').eq(i))
-                                $('.baseVideoList').eq(0).children('li').eq(i).click(function() {
-                                    // console.log(data.data[i].lectures_with_cover[0].id)
-                                    window.location.href = 'fenlei.video.html';
-                                    localStorage.usid = data.data[i].lectures_with_cover[0].id;
-                                })
-                            })
-
-                        }
-                        // var aa = false;
-
-                        // function res() {
-                        //     //start  判断屏幕尺寸
-
-                        //     var wid = $(window).width();
-                        //     console.log(wid);
-                        //     if (wid <= 768) {
-                        //         console.log("移动");
-                        //         $(window).scroll(function() {
-                        //             console.log("这是移动端");
-                        //             var foot = $(window).scrollTop() >= $(document).height() - $(window).height() - 100;
-                        //             console.log(foot);
-                        //             if (foot && wid <= 768) {
-                        //                 $('.baseVideoList').html('');
-                        //                 num += 12;
-                        //                 if (num >= data.data.length) {
-                        //                     $('.none').eq(0).show();
-                        //                 }
-                        //                 add(num);
-                        //             }
-                        //         });
-                        //     } else {
-                        //         aa = true;
-                        //         console.log("pc");
-                        //     }
-                        // }
-                        // //end  判断屏幕尺寸
-                        // window.onresize = function() {
-                        //     res();
-                        //     if (aa == true) {
-                        //         window.location.reload();
-                        //         aa = false;
-                        //     }
-                        // }
-                        // res();
-
-
-                    }
-                })
-            }
-
-
+            })
 
         }
     })

@@ -261,6 +261,12 @@
         }
 
     })
+    $('.listTime').eq(0).click(function() {
+        $('.listbox').eq(0).slideToggle()
+    })
+    $('.listClass').eq(0).click(function() {
+        $('.listbox').eq(1).slideToggle()
+    })
     var num = 12;
 
     $.ajax({

@@ -106,10 +106,9 @@ h3 {
     background: #00AEEF;
 }
 
-
-/*.listChangesBox ul li:hover .listbox {
+.listChangesBox ul li:hover .listbox {
     display: block;
-}*/
+}
 
 .listbox {
     position: absolute;
