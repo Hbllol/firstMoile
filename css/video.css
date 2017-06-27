@@ -92,7 +92,7 @@ section {
 
 .baseCommentListBox {
     width: 100%;
-    padding: 15px 0px 15px 23px;
+    padding: 15px 15px 15px 15px;
     box-sizing: border-box;
     position: relative;
 }
